@@ -60,7 +60,7 @@ class rlEnvs(Env):
         self.observation_space = Dict({
             "image": image_space,
             "vector": vector_space})
-        self.velocity = 1
+        self.velocity = 0
         self.noise = self.conf['noise']
         self.reward = 0 
         self.delt= self.conf['delt']
@@ -91,7 +91,7 @@ class rlEnvs(Env):
         self.done = False
         self.reward = 0
         self.total_time = 0
-        self.velocity = 1
+        self.velocity = 0
         self.truncated = False
         self.trajectory = []
         self.reward_trajectory = []
@@ -112,7 +112,7 @@ class rlEnvs(Env):
             self.reward = 100
             # return np.array([self.state]), self.reward, self.done, {} 
         ## check for truncation
-        elif self.velocity<=0 or self.total_time>=10 or (x_old-self.target_x)>0.001  :
+        elif self.velocity<0 or self.total_time>=10 or (x_old-self.target_x)>0.001  :
             self.reward = -50
             self.truncated = True
         # elif True:
@@ -126,21 +126,21 @@ class rlEnvs(Env):
         # print(f"internal state: {self.state}")
         if self.noise :
             # print("Noise added")
-            x_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
-            y_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
-        if x_new < self.start_xx:
-            x_new = self.start_xx+0.0001
-            self.reward-=5
-        elif x_new > self.target_xx:
-            x_new = self.target_xx-0.0001
-            self.reward-=5
+            x_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+            y_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+        # if x_new < self.start_xx:
+        #     x_new = self.start_xx+0.0001
+        #     self.reward-=5
+        # elif x_new > self.target_xx:
+        #     x_new = self.target_xx-0.0001
+        #     self.reward-=5
 
-        if y_new < self.start_xx:
-            y_new = self.start_xx+0.0001
-            self.reward-=5
-        elif y_new > self.target_xx:
-            y_new = self.target_xx-0.0001
-            self.reward-=5
+        # if y_new < self.start_xx:
+        #     y_new = self.start_xx+0.0001
+        #     self.reward-=5
+        # elif y_new > self.target_xx:
+        #     y_new = self.target_xx-0.0001
+        #     self.reward-=5
         
         #change velocity 
         self.velocity = self._newvelocity(x_old,y_old,x_new,y_new)

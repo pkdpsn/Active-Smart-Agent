@@ -12,7 +12,7 @@ from config import DEFAULT_CONFIG
 
 def potential(option,x,y):
     if option == 1:
-        return np.where(x**2 + y**2 < 1/4, 16*0.* (x**2 + y**2 - 1/4)**2, 0)
+        return np.where(x**2 + y**2 < 1/4, 16*0.0* (x**2 + y**2 - 1/4)**2, 0)
     elif option == 2:
         return 0.3*(1-x)**2*np.exp(-x**2-(y+1)**2) - (0.2*x - x**3 - y**5)*np.exp(-x**2 - y**2) - 1/30*np.exp(-(x+1)**2 - y**2)
     else :

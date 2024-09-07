@@ -12,7 +12,7 @@ rewards = []
 time = []
 all_x = []
 all_y = []
-EPISODES =100
+EPISODES =1
 for episode in range(1,EPISODES+1):
     state = env.reset()
     done = False
@@ -21,7 +21,7 @@ for episode in range(1,EPISODES+1):
     while not done and not truncated:
     # actions = [5,3,3,3,3,2,3,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3,3,3,3,3,3,3,2,3,3,3,3]
     # for i in range(1):
-        action =0# np.random.randint(0,8)
+        action = np.random.randint(0,8)
         next_state,reward,done,truncated,_ = env.step(action)
         # print(done,truncated)
         score+=reward
@@ -53,8 +53,8 @@ for episode in range(1,EPISODES+1):
 
 
 ##plot each path one one graph \
-plt.xlim(-0.75, 0.75)
-plt.ylim(-0.75, 0.75)
+# plt.xlim(-0.75, 0.75)
+# plt.ylim(-0.75, 0.75)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.grid()
 for path in paths:
