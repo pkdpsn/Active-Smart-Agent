@@ -48,8 +48,11 @@ class rlEnvs(Env):
     def __init__(self, conf: dict = None):
         if conf==None:
             self.conf = DEFAULT_CONFIG
+            print("Using default config")
         else:
             self.conf = conf
+            print("Using custom config")
+            print(self.conf["delt"])
         self.d = self.conf['d']
         self.visiblitity = self.conf['visiblitity']
         self.truncated = False 
