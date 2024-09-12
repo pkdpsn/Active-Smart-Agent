@@ -4,7 +4,7 @@ DEFAULT_CONFIG = {
     'visiblitity': 18,
     'space': 0.01,
     'noise': True,
-    'delt': 0.0001,
+    'delt': 0.01,
     'start': [-0.5,0],
     'end': [0.5,0],
     'random_start': False,

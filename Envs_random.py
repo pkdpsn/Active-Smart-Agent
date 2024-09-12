@@ -63,7 +63,7 @@ class rlEnvs(Env):
         self.observation_space = Dict({
             "image": image_space,
             "vector": vector_space})
-        self.velocity = 0
+        self.velocity = 1
         self.noise = self.conf['noise']
         self.reward = 0 
         self.delt= self.conf['delt']
@@ -94,7 +94,7 @@ class rlEnvs(Env):
         self.done = False
         self.reward = 0
         self.total_time = 0
-        self.velocity = 0
+        self.velocity = 1
         self.truncated = False
         self.trajectory = []
         self.reward_trajectory = []
@@ -103,7 +103,7 @@ class rlEnvs(Env):
 
                 
         return np.array([self.state])# what all to return here
-
+ 
     def step(self, action: int):
         y_old,x_old =self.state
         x_new, y_new = x_old, y_old
@@ -129,8 +129,8 @@ class rlEnvs(Env):
         # print(f"internal state: {self.state}")
         if self.noise :
             # print("Noise added")
-            x_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
-            y_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+            x_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+            y_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
         # if x_new < self.start_xx:
         #     x_new = self.start_xx+0.0001
         #     self.reward-=5
@@ -150,12 +150,6 @@ class rlEnvs(Env):
         # print(f"Velocity: {self.velocity:.5f} state: [{self.state[0]:.3f}, {self.state[1]:.3f}] , {self.done==False} ,{self.truncated==False} ,{(x_new-self.target_x)}")
         self.state = [y_new, x_new]
         self.total_time+=self.delt
-        '''
-        3 types of rewards can be given
-        -ve time for spending more time
-        +ve reward for reaching the midtargets
-
-        '''
         self.reward += -(9/10)*self.delt +(1/10)*(-sqrt((x_new-self.target_x)**2 + (y_new-self.target_y)**2))
         #return the visible part of env 
 
