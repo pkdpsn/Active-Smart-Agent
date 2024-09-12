@@ -90,16 +90,16 @@ class rlEnvs(Env):
         self.j=0
         self.radius = np.arange(0, (abs(self.start_x)+abs(self.target_x))/2+self.conf["delr"], self.conf["delr"])
         self.theta_range = np.arange(0, 2*np.pi, self.conf["deltheta"])
-        print(f"Radius: {self.radius}")
-        print(f"Theta: {self.theta_range}")
-        print(self.conf["deltheta"])
+        # print(f"Radius: {self.radius}")
+        # print(f"Theta: {self.theta_range}")
+        # print(self.conf["deltheta"])
         # self.theta = 0
         
         
 
     def reset(self,seed=None,options=None):
         super().reset(seed=seed)
-        print(f"{"*"*50}{self.i} TRUNCATED {self.truncated} , DONE {self.done} Total time {self.total_time:.3f} Last Step {self.state[1]:.3f}, {self.state[0]:.3f} {self.j} ") 
+        # print(f"{"*"*50}{self.i} TRUNCATED {self.truncated} , DONE {self.done} Total time {self.total_time:.3f} Last Step {self.state[1]:.3f}, {self.state[0]:.3f} {self.j} ") 
         
         if self.random_start:
             self.state = [random.uniform(self.conf["start"][0],self.conf["end"][0]),random.uniform(self.conf["start"][0],self.conf["end"][0])]
@@ -134,7 +134,6 @@ class rlEnvs(Env):
         y_old,x_old =self.state
         x_new, y_new = x_old, y_old
         self.reward = 0
-        
         # print("Taking step")
         ##check if the agent is within the target range 
         if sqrt((self.target_x-x_old)**2 + (self.target_y-y_old)**2) < self.del_r or ((x_old-self.target_x)>0.001 and abs(y_old-self.target_y)<0.1):
@@ -147,7 +146,7 @@ class rlEnvs(Env):
             self.reward = -500
             self.truncated = True
         # elif True:
-        theta = (action-4)*np.pi/4
+        theta = (action-0)*np.pi/4
         if self.noise:
             theta = theta +1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
         
@@ -157,8 +156,8 @@ class rlEnvs(Env):
         # print(f"internal state: {self.state}")
         if self.noise :
             # print("Noise added")
-            x_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
-            y_new += 1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+            x_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
+            y_new += 0*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
         if x_new < self.start_x:
             x_new = self.start_x+0.0001
             self.reward-=5
