@@ -66,7 +66,7 @@ class rlEnvs(Env):
         self.done = False
         self.action_space = Discrete(8)
         image_space = Box(low=-float('inf'), high=float('inf'), shape=(2*self.conf["visiblitity"]+1,2*self.conf["visiblitity"]+1, 1), dtype=np.float64) 
-        vector_space = Box(low=-float('inf'), high=float('inf'), shape=(5,), dtype=np.float64) 
+        vector_space = Box(low=-float('inf'), high=float('inf'), shape=(7,), dtype=np.float64) 
         self.observation_space = Dict({
             "image": image_space,
             "vector": vector_space})
@@ -120,7 +120,7 @@ class rlEnvs(Env):
 
         vision = vision_xy(self.state[1],self.state[0],None)
         closest_radius,closest_theta=self._return_state(self.state[1],self.state[0])
-        vec = [closest_radius,closest_theta,self.target_x,self.target_x,int(self.velocity)]
+        vec = [closest_radius,closest_theta,self.state[1],self.state[0],self.target_x,self.target_x,int(self.velocity)]
         obs = {
             "image":  np.expand_dims(vision, axis=-1),
             "vector": np.array(vec, dtype=np.float32)
@@ -191,7 +191,7 @@ class rlEnvs(Env):
         self.reward_trajectory.append(self.reward)
         self.trajectory.append(self.state)
         closest_radius,closest_theta=self._return_state(self.state[1],self.state[0])
-        vec = [closest_radius,closest_theta,self.target_x,self.target_x,int(self.velocity)]
+        vec = [closest_radius,closest_theta,self.state[1],self.state[0],self.target_x,self.target_x,int(self.velocity)]
         obs = {
             "image":  np.expand_dims(vision, axis=-1),
             "vector": np.array(vec, dtype=np.float32)

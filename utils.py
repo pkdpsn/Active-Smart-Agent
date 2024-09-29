@@ -12,7 +12,7 @@ from config import DEFAULT_CONFIG
 
 def potential(option,x,y):
     if option == 1:
-        return np.where(x**2 + y**2 < 1/4, 16*0.0* (x**2 + y**2 - 1/4)**2, 0)
+        return np.where(x**2 + y**2 < 1/4, 16*0.3* (x**2 + y**2 - 1/4)**2, 0)
     elif option == 2:
         return 0.3*(1-x)**2*np.exp(-x**2-(y+1)**2) - (0.2*x - x**3 - y**5)*np.exp(-x**2 - y**2) - 1/30*np.exp(-(x+1)**2 - y**2)
     else :
@@ -23,11 +23,12 @@ def make_grid (conf):
         conf = DEFAULT_CONFIG
     else :  
         conf = conf
-    x = np.linspace(-0.05+conf["start"][0],conf["end"][0]+0.05,10)
-    y = np.linspace(-0.05+conf['start'][0],conf['end'][0]+0.05,10)
+    x = np.linspace(-0.05+conf["start"][0],conf["end"][0]+0.05,20)
+    y = np.linspace(-0.05+conf['start'][0],conf['end'][0]+0.05,20)
     X,Y = np.meshgrid(x,y)
     grid = potential(conf['function'],X,Y)
     return grid
+
 
 #####################VISION####################
 def vision_xy(x,y,conf=None):
@@ -52,23 +53,27 @@ def vision_xy(x,y,conf=None):
 
 #################### RENDER ####################
 
-def plot_trajectory(trajectory,grid,conf , save_path =None,plot= False, Title = None, time = None):
+def plot_trajectory(trajectory,grid,conf=None , save_path =None,plot= False, Title = None, time = None):
     if conf == None:
         conf = DEFAULT_CONFIG
     else :
         conf = conf
     #plot the potential 
     max_abs_value = np.max(np.abs(grid))  # find the maximum absolute value in the grid
-    print(grid.shape)
-    # plt.imshow(grid ,cmap='RdBu', interpolation='nearest', vmin=-max_abs_value, vmax=max_abs_value,extent=[-grid.shape[0]/1., grid.shape[0]/1., -grid.shape[0]/1., grid.shape[0]/1. ])
+    # print(grid)
+
+    extent = [conf['start'][0],conf['end'][0],conf['start'][0],conf['end'][0]]
+    # print(extent)
+    plt.imshow(grid ,cmap='RdBu', interpolation='nearest', vmin=-max_abs_value, vmax=max_abs_value,extent=extent)
     # num_ticks = 5
     # x_ticks = np.linspace(0, grid.shape[1], num_ticks)
     # y_ticks = np.linspace(0, grid.shape[0], num_ticks)
     # x_labels = np.linspace(conf['start'][0], conf['end'][0], num_ticks)
     # y_labels = np.linspace(conf['start'][0], conf['end'][0], num_ticks)
+    
     # plt.xticks(x_ticks, x_labels)
     # plt.yticks(y_ticks, y_labels)
-    # plt.colorbar()
+    plt.colorbar()
 
     x_coords = [state[1] for state in trajectory]
     y_coords = [state[0] for state in trajectory]
@@ -77,20 +82,20 @@ def plot_trajectory(trajectory,grid,conf , save_path =None,plot= False, Title = 
     # for i in range(len(x_coords)-1):
     #     print(x_coords[i], y_coords[i])
     # Calculate differences between consecutive points for arrow directions
-    x_diff = np.diff(x_coords)
-    y_diff = np.diff(y_coords)
+    # x_diff = np.diff(x_coords)
+    # y_diff = np.diff(y_coords)
     plt.xlim(conf['start'][0], conf['end'][0])
     plt.ylim(conf['start'][0], conf['end'][0])
     # for i in range(len(x_coords)-1):
     #     plt.quiver(x_coords[i], y_coords[i], x_diff[i], y_diff[i], angles='xy', scale_units='xy', scale=1.5, color='red')
     
-    # plt.plot(x_coords, y_coords, color='black')
-    # plt.scatter(x_coords[0], y_coords[0], color='orange',s=200)
+    plt.plot(x_coords, y_coords, color='black')
+    plt.scatter(x_coords[0], y_coords[0], color='orange',s=200)
     # plt.scatter(x_coords[1:-1], y_coords[1:-1], color='green',s=100)
-    # plt.scatter(x_coords[-1], y_coords[-1], color='blue',s=200)
+    plt.scatter(x_coords[-1], y_coords[-1], color='blue',s=200)
     # plt.scatter([-0.4,0, 0.4],[0,0,0], color='black',s=100)
     
-    plt.plot(x_coords, y_coords, marker='s', linestyle='-', color='b')
+    # plt.plot(x_coords, y_coords, marker='s', linestyle='-', color='b')
     # plt.plot(0, 0, marker='o', color='g', markersize=20)
     # plt.plot(3, 4, marker='o', color='g', markersize=20)
     # for i in range(len(x_coords)):
@@ -108,6 +113,8 @@ def plot_trajectory(trajectory,grid,conf , save_path =None,plot= False, Title = 
         save_path = f'RL_agents/figure_{current_time}.png'
     else:
         directory = os.path.dirname(save_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
         save_path = f'{directory}/figure_{current_time}.png'
         
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -122,11 +129,7 @@ def plot_trajectory(trajectory,grid,conf , save_path =None,plot= False, Title = 
 # print(make_grid(None)) tested and working
 
 # if __name__ == "__main__":
-#     # Call the vision_xy function with test inputs
-#     result = vision_xy(-0.45,0,None)
-
-#     # Print the result
-#     print(result)
+#     
 
 # tested and working 
 

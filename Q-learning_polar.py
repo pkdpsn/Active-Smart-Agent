@@ -11,7 +11,7 @@ from tqdm import tqdm
 from colorama import Fore , Back
 
 def mapping(radius, theta, r, t):
-    if (radius ==0 ):
+    if (radius == 0 ):
         return 0
     radius_index = np.abs(radius - r).argmin()
     theta_index = np.abs(theta - t).argmin()
@@ -24,18 +24,21 @@ def save_q_table(Q, filename):
 def run(EPISODES,verbose,epsilon,print_val,q,env,filename,r,t):
     learning_rate=0.9
     discount_factor=1
-    epsilon_decay_rate=0.00015
+    epsilon_decay_rate=0.00018
     rng = np.random.default_rng()
     reward_per_episodes=np.zeros(EPISODES)
     env= rlEnvs()
+    grid = make_grid(DEFAULT_CONFIG)
     for i in tqdm(range(EPISODES)):
         state, _ = env.reset()
         done= False
         truncated= False
+        trajectory=[]
         while (not done and  not truncated):
             state = state["vector"]
             state_radius = state[0]
             state_theta = state[1]
+            trajectory.append((state[3],state[2]))
             state_index = mapping(state_radius, state_theta, r, t)
             if rng.random() <epsilon:
                 action= env.action_space.sample()
@@ -49,6 +52,8 @@ def run(EPISODES,verbose,epsilon,print_val,q,env,filename,r,t):
             state = new_state
             reward_per_episodes[i]+=reward
         epsilon= max(epsilon-epsilon_decay_rate,0.05)
+        if (i%100==0):
+            plot_trajectory(trajectory,grid,Title=f"Episode {i} Reward {reward_per_episodes[i]} ")
         save_q_table(q, "IDK.pkl")
 
 def main():
@@ -80,7 +85,7 @@ def main():
         
     print(f"Q_table Shape ",q.shape)
 
-    run(2,False,0.95,1000,q,env,filename,radius,theta)
+    run(10000,False,0.95,1000,q,env,filename,radius,theta)
     
 
 

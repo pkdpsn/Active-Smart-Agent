@@ -58,8 +58,8 @@ class rlEnvs(Env):
         self.trajectory = []
         self.reward_trajectory = []
         self.trajectory.append(self.state)
-        action = np.random.randint(0, 8)
-        self.theta = (action - 0) * np.pi / 4
+        # action = np.random.randint(0, 8)
+        self.theta = 0 #(action - 0) * np.pi / 4
 
         return np.array(self.state, dtype=np.float32)  # Ensure dtype matches observation space
 
@@ -76,7 +76,7 @@ class rlEnvs(Env):
             self.truncated = True
         
         # Compute the new angle based on the action
-        theta = 0*(action - 0) * np.pi / 4
+        theta = 1*(action - 0) * np.pi / 4
         if self.noise:
             theta += sqrt(2 * self.d * self.delt) * np.random.normal(0, 1)
             # print(np.degrees(theta))

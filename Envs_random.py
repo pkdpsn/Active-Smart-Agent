@@ -119,7 +119,7 @@ class rlEnvs(Env):
             self.reward = -50
             self.truncated = True
         # elif True:
-        theta = (action-0)*np.pi/4
+        theta = (action-0)*np.pi/400
         if self.noise:
             theta = theta +1*sqrt(2*self.d*self.delt)*np.random.normal(0,1)
         self.theta = theta

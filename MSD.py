@@ -17,7 +17,7 @@ _CONFIG = {
     'delta_r': 0.05,
     'function': 1
 }
-TIME_CONSTANT = 2
+TIME_CONSTANT = 1
 delta_t = [1.0, 0.1, 0.01 , 0.001 , 0.0001] 
 colors = ['blue', 'green', 'orange', 'purple', 'pink', 'brown']
 
@@ -29,16 +29,17 @@ rewards = []
 time = []
 all_x = []
 all_y = []
-EPISODES = 1000
+EPISODES = 100
 for episode in range(1, EPISODES + 1):
     state = env.reset()
     done = False
     score = 0
     truncated = False
     while not done and not truncated:
-        action = np.random.randint(0, 8)
+        action = np.random.randint(0, 800)
         next_state, reward, done, truncated, _ = env.step(action)
         score += reward
+
     paths.append(env.render())
     rewards.append(score)
     time.append(env.total_time)
